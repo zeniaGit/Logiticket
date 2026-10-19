@@ -4,5 +4,6 @@
 node_modules/
 uploads/
 .git/
+public/poster-data.js
 .DS_Store
 npm-debug.log*
