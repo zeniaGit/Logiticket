@@ -1,35 +1,34 @@
 # Despliegue en Coolify
 
-El Compose principal está pensado para Coolify: el servicio `app` escucha en el puerto interno 3001 y no publica un puerto del host; Coolify enruta el dominio y termina HTTPS. PostgreSQL queda dentro de la red privada y conserva sus datos en un volumen persistente en `/var/lib/postgresql`, ruta de datos de la imagen PostgreSQL 18.
+El Compose principal publica solo la aplicación. Usa el recurso PostgreSQL 16 que se configura aparte en Coolify; no inicia una segunda base. La aplicación escucha en el puerto interno 3001 y Coolify enruta el dominio y termina HTTPS. Los carteles se conservan en el volumen `logiticket_uploads`, montado en `/data/uploads`.
 
-## Preparar el origen
+## Conectar la base PostgreSQL 16
 
-Coolify necesita leer los archivos de este directorio desde un repositorio Git accesible por el servidor. Cuando el proyecto esté en Git, crea un recurso **Application → Docker Compose** conectado al repositorio y configura la carpeta base `outputs/logiticket-mvp` (o mueve este directorio a la raíz del repositorio) y el Compose path `compose.yaml`.
+1. Comprueba que la aplicación y el recurso PostgreSQL están desplegados en el mismo servidor/destino Docker de Coolify.
+2. En la configuración del recurso Docker Compose de la aplicación, activa **Connect To Predefined Network** (en Advanced, según la versión de Coolify). Así podrá resolver y alcanzar el hostname interno de PostgreSQL. No publiques el puerto 5432 ni asignes dominio al recurso de base de datos.
+3. En el recurso PostgreSQL, copia el valor **Internal URL**. En las variables de entorno de la aplicación define `DATABASE_URL` con esa URL completa. No la pongas en Git ni en el chat; Coolify debe guardarla como variable secreta.
+4. Define además `NODE_ENV=production`, `TRUST_PROXY=1` y un `SESSION_SECRET` aleatorio largo. No hacen falta `POSTGRES_USER`, `POSTGRES_PASSWORD` ni `POSTGRES_DB` en la aplicación: esos parámetros pertenecen al recurso de base y ya están incluidos en la Internal URL.
+5. Si Coolify ofrece la opción de hacer literal la variable, actívala para `DATABASE_URL`: la contraseña podría contener caracteres reservados o `$`.
 
-En **Environment Variables** define valores propios de producción:
+El Internal URL suele tener la forma `postgres://usuario:contraseña@hostname-interno:5432/nombre_base`. Usa el valor generado por Coolify literalmente, incluido su hostname y base de datos. No uses `localhost`: dentro del contenedor apuntaría a la propia aplicación.
 
-- `NODE_ENV=production`
-- `TRUST_PROXY=1`
-- `SESSION_SECRET`: secreto aleatorio largo
-- `POSTGRES_DB=logiticket`
-- `POSTGRES_USER=logiticket`
-- `POSTGRES_PASSWORD`: contraseña aleatoria larga, alfanumérica para mantener segura su interpolación dentro de `DATABASE_URL`
+## Repositorio, dominio y despliegue
 
-No uses los secretos de ejemplo. La definición Compose marca las variables críticas como requeridas, de modo que Coolify impide el despliegue si faltan.
+Coolify necesita leer este directorio desde un repositorio Git accesible por el servidor. Cuando el proyecto esté en Git, crea un recurso **Application → Docker Compose** conectado al repositorio y configura la carpeta base `outputs/logiticket-mvp` (o mueve este directorio a la raíz del repositorio) y el Compose path `compose.yaml`. Deja Compose en modo normal; no actives Raw Compose.
 
-## Dominio y primer despliegue
+1. Añade un dominio al servicio `app`, con el puerto interno `3001`.
+2. Apunta el registro DNS del dominio al VPS y comprueba que el proxy de Coolify puede recibir tráfico por HTTPS.
+3. Despliega y revisa que el servicio `app` quede saludable.
+4. Desde la terminal del servicio app ejecuta `npm run migrate`.
+5. Crea la cuenta propietaria ejecutando `npm run create-user -- propietario@ejemplo.es "Propietario Logiticket" platform_admin` y completa la contraseña cuando se solicite.
+6. Abre `/login` en el dominio configurado.
 
-1. Añade el dominio en Coolify, selecciona el servicio `app` y usa el puerto interno `3001`.
-2. Configura el DNS del dominio para apuntar al VPS y asegúrate de que el proxy de Coolify pueda recibir tráfico HTTPS.
-3. Despliega desde Coolify y revisa que `app` y `db` queden saludables.
-4. Desde la consola/terminal del servicio app, ejecuta `npm run migrate`.
-5. En esa misma consola ejecuta `npm run create-user -- propietario@ejemplo.es "Propietario Logiticket" platform_admin` y completa la contraseña solicitada.
-6. Abre el dominio configurado e inicia sesión.
+Configura copias de seguridad PostgreSQL en Coolify y guarda una copia fuera del VPS. El volumen persistente protege frente a recreaciones normales del contenedor, pero no frente a pérdida del servidor o disco. Incluye también `/data/uploads` (volumen `logiticket_uploads`) en la estrategia de copia.
 
-Configura las copias de seguridad de PostgreSQL en Coolify y guarda también una copia fuera del VPS. Un volumen persistente protege frente a recreaciones normales del contenedor, pero no frente a pérdida del servidor o del disco.
+## Desarrollo local
 
-Los carteles WebP se guardan en `/data/uploads`. El Compose monta allí el volumen persistente `logiticket_uploads`; conserva ese montaje en Coolify y añade ese volumen a las copias de seguridad del VPS. La base de datos guarda las URL de la miniatura y del cartel de detalle. Los márgenes de ambas variantes toman el color predominante de los bordes del cartel para evitar bandas negras.
+Para iniciar localmente la aplicación con una base PostgreSQL 16 propia de Compose, usa `docker compose --env-file .env -f compose.yaml -f compose.local.yaml up --build`. El override local agrega la base y el puerto 5432 ligado solo a loopback; Coolify debe usar únicamente `compose.yaml`.
 
 ## Estado y límites
 
-Este directorio aún no está conectado a un repositorio remoto ni desplegado en Coolify. Redsys tampoco está configurado. Hace falta proporcionar el código al recurso Git de Coolify, añadir los secretos en su panel y confirmar previamente con banco/adquirente que el modelo de cobro y liquidación está habilitado.
+La portada pública sigue leyendo el catálogo estático del CSV. Los eventos nuevos aún no aparecen automáticamente en esa portada. El checkout no crea pedidos, no emite entradas ni conecta Redsys; por tanto, el despliegue actual sirve para probar el panel y el flujo de eventos, no para vender entradas reales.

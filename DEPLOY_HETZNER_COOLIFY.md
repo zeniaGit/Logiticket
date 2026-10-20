@@ -26,23 +26,23 @@ Hetzner factura el servidor cloud por horas con un límite mensual; confirma pre
 3. Decidir el dominio/subdominio público, por ejemplo `entradas.tudominio.com`, y apuntar su registro DNS A a la IPv4 del servidor.
 4. Guardar en Coolify secretos nuevos de producción. No reutilices el `.env` local ni subas secretos a Git.
 
-## Recurso Docker Compose en Coolify
+## Recursos en Coolify
 
-Para un repositorio donde la raíz sea este proyecto:
+Ya tienes un proyecto y un recurso PostgreSQL 16. Usa esa base como recurso independiente: el Compose de Logiticket solo levanta la aplicación y no crea una segunda base. Para un repositorio donde la raíz sea este proyecto:
 
 - Build strategy: **Docker Compose**.
 - Base Directory: `/`.
 - Docker Compose Location: `compose.yaml`.
 - Dominio del servicio `app`: `https://entradas.tudominio.com:3001`.
-- Variables: `NODE_ENV=production`, `TRUST_PROXY=1`, `POSTGRES_DB=logiticket`, `POSTGRES_USER=logiticket`, `POSTGRES_PASSWORD=<64 caracteres hexadecimales>`, `SESSION_SECRET=<64 caracteres hexadecimales>`.
+- Variables: `NODE_ENV=production`, `TRUST_PROXY=1`, `DATABASE_URL=<Internal URL de tu recurso PostgreSQL 16>`, `SESSION_SECRET=<secreto aleatorio largo>`.
 - Deja el modo Compose normal de Coolify; no actives Raw Compose.
-- El servicio PostgreSQL no debe tener dominio público.
+- Activa **Connect To Predefined Network** para que la app alcance el hostname interno de la base. App y base deben estar en el mismo servidor/destino. El servicio PostgreSQL no debe tener dominio público ni el puerto 5432 publicado.
 
-El Compose ya define los volúmenes `logiticket_pg` y `logiticket_uploads`; conserva ambos. PostgreSQL solo escucha en la red interna. Los carteles se guardan en `/data/uploads`. Configura copias restaurables de PostgreSQL y de los carteles fuera del VPS: un volumen persistente por sí solo no es una copia de seguridad.
+El Compose define el volumen `logiticket_uploads`; consérvalo. Los carteles se guardan en `/data/uploads`. Configura copias restaurables del recurso PostgreSQL y de los carteles fuera del VPS: un volumen persistente por sí solo no es una copia de seguridad.
 
 ## Primer arranque
 
-1. Desplegar desde Coolify y esperar a que `app` y `db` estén saludables.
+1. Desplegar desde Coolify y esperar a que `app` esté saludable.
 2. Abrir una terminal del servicio `app` y ejecutar `npm run migrate`.
 3. Crear el usuario de plataforma desde esa terminal:
 

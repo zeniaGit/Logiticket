@@ -13,15 +13,15 @@ cp .env.example .env
 openssl rand -hex 32
 ```
 
-Pega un valor en `SESSION_SECRET` y otro en `POSTGRES_PASSWORD`. Asegúrate de que el mismo valor de `POSTGRES_PASSWORD` aparece en `DATABASE_URL` antes de `@localhost`. Luego arranca la aplicación y PostgreSQL:
+Pega un valor en `SESSION_SECRET` y otro en `POSTGRES_PASSWORD`. Compose conecta automáticamente la app con la base local usando esos valores; no hace falta editar `DATABASE_URL`:
 
 ```sh
-docker compose -f compose.yaml -f compose.local.yaml up -d --build
+docker compose --env-file .env -f compose.yaml -f compose.local.yaml up -d --build
 docker compose exec app npm run migrate
 docker compose exec app npm run create-user -- propietario@ejemplo.es "Propietario Logiticket" platform_admin
 ```
 
-El último comando pide la contraseña sin mostrarla y la guarda como hash. Abre `http://localhost:3001` e inicia sesión. La base de datos no queda publicada en un puerto del host.
+El último comando pide la contraseña sin mostrarla y la guarda como hash. Abre `http://localhost:3001` e inicia sesión. El puerto PostgreSQL solo escucha en loopback (`localhost`) durante el desarrollo.
 
 También puedes ejecutar el proceso Node directamente en el host con Node.js 24 LTS y una instancia PostgreSQL disponible; configura `DATABASE_URL` para esa instancia y sigue los comandos `npm install`, `npm run migrate`, `npm run create-user` y `npm start`.
 
