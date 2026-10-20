@@ -51,3 +51,8 @@
 .sales-copy{display:grid;gap:1px}
 .sales-pill.demo-sales{border-style:dashed}
 .sales-pill.demo-sales .sales-copy small{font-size:8px;line-height:1;color:#8a8d82;text-transform:uppercase;letter-spacing:.45px;font-weight:700}
+.badge.availability{display:grid;gap:1px;min-width:83px;text-align:center;text-transform:none;letter-spacing:.1px;font-size:10px;padding:7px 10px}
+.badge.availability small{font-size:7px;line-height:1;text-transform:uppercase;letter-spacing:.7px;color:#82847b}
+.badge.availability.complete{background:var(--lime);color:var(--ink)}
+.badge.availability.complete small{color:#556315}
+.badge.availability.example{border:1px dashed #d8dbd0}
