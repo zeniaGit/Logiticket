@@ -19,12 +19,12 @@ Selecciona Ubuntu 24.04 LTS, añade una clave SSH pública, activa copias de seg
 
 Hetzner factura el servidor cloud por horas con un límite mensual; confirma precio, IPv4, IVA y coste de copias en la pantalla final antes de contratar.
 
-## Preparación que falta fuera del código
+## Preparación restante
 
-1. Publicar este directorio en un repositorio **privado** de GitHub, GitLab o similar. El `.env` local está excluido del repositorio y de la imagen Docker.
-2. Tener acceso al proyecto y a un servidor de despliegue en Coolify.
+1. Confirmar que `zeniaGit/Logiticket` tiene visibilidad privada; el `.env` local está excluido del repositorio y de la imagen Docker.
+2. Autorizar Coolify para leer el repositorio y seleccionar la rama `main`.
 3. Decidir el dominio/subdominio público, por ejemplo `entradas.tudominio.com`, y apuntar su registro DNS A a la IPv4 del servidor.
-4. Guardar en Coolify secretos nuevos de producción. No reutilices el `.env` local ni subas secretos a Git.
+4. Guardar en Coolify los secretos de producción. No reutilices el `.env` local ni subas secretos a Git.
 
 ## Recursos en Coolify
 
@@ -55,7 +55,7 @@ El Compose define el volumen `logiticket_uploads`; consérvalo. Los carteles se 
 
 ## Después de pagar/crear el VPS
 
-Para completar la publicación necesitaré la IPv4 resultante, el dominio elegido, el repositorio privado conectado a Coolify y saber si Coolify está instalado en el VPS nuevo o en el que ya tienes. No envíes contraseñas, claves privadas ni tokens por el chat; introdúcelos directamente en Hetzner/Coolify.
+Para completar el despliegue necesitamos que Coolify lea `zeniaGit/Logiticket`, el dominio elegido y confirmar que Coolify está instalado en tu VPS existente. No envíes contraseñas, claves privadas ni tokens por el chat; introdúcelos directamente en Hetzner/Coolify.
 
 ## Referencias oficiales
 

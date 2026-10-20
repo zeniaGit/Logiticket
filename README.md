@@ -27,7 +27,7 @@ También puedes ejecutar el proceso Node directamente en el host con Node.js 24 
 
 ## Despliegue en Hetzner con Coolify
 
-Para desplegar en Coolify, consulta [COOLIFY.md](COOLIFY.md). Coolify termina HTTPS y enruta el dominio al puerto interno 3001; no hace falta publicar la base de datos ni ejecutar otro proxy en el stack. Aún no he conectado el código a un repositorio remoto ni desplegado nada en tu VPS.
+Para desplegar en Coolify, consulta [COOLIFY.md](COOLIFY.md). El código está publicado en `zeniaGit/Logiticket`, rama `main`. Coolify termina HTTPS y enruta el dominio al puerto interno 3001; no hace falta publicar la base de datos ni ejecutar otro proxy en el stack. La aplicación aún no está desplegada en el VPS.
 
 Para dar acceso a un organizador:
 

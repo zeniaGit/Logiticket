@@ -14,7 +14,7 @@ El Internal URL suele tener la forma `postgres://usuario:contraseña@hostname-in
 
 ## Repositorio, dominio y despliegue
 
-Coolify necesita leer este directorio desde un repositorio Git accesible por el servidor. Cuando el proyecto esté en Git, crea un recurso **Application → Docker Compose** conectado al repositorio y configura la carpeta base `outputs/logiticket-mvp` (o mueve este directorio a la raíz del repositorio) y el Compose path `compose.yaml`. Deja Compose en modo normal; no actives Raw Compose.
+El código está publicado en `zeniaGit/Logiticket`, rama `main`, con este proyecto en la raíz del repositorio. En Coolify crea un recurso de aplicación desde GitHub que use **Docker Compose** y selecciona `compose.yaml` como Compose path. Deja Compose en modo normal; no actives Raw Compose. Si el repositorio es privado, autoriza la GitHub App de Coolify para acceder a él.
 
 1. Añade un dominio al servicio `app`, con el puerto interno `3001`.
 2. Apunta el registro DNS del dominio al VPS y comprueba que el proxy de Coolify puede recibir tráfico por HTTPS.
