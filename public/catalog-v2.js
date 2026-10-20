@@ -13,11 +13,12 @@ const demoAvailabilityBySlug=new Map([
  ['sebas-de-la-calle-en-logrono-893','available'],
  ['sphinx-en-almeria-757','available'],
  ['fonrock-2026---king-sapo---putas-de-hojalata-804','available'],
- ['junco-en-parla-852','complete']
+ ['junco-en-parla-852','complete'],
+ ['d-lirio-y-camaleones-en-almeria-874','complete']
 ]);
 function availabilityBadge(e){const stats=salesStats.get(e.sourceUrl);const hasReal=stats&&Number(stats.capacity)>0;const state=hasReal?(Number(stats.sold)>=Number(stats.capacity)?'complete':'available'):(demoAvailabilityBySlug.get(e.slug)||'available');const label=state==='complete'?'Completo':'Disponible';return `<span class="badge availability ${state}" aria-label="${label}">${label}</span>`}
-function salesBadge(e){const sales=salesPercent(e);if(sales===null)return '<span class="detailstatus no-sales"><i></i><span>Ventas sin datos</span></span>';const {percent}=sales,color=percent>=100?'#d9fb48':'#3b82f6',label=percent>=100?'agotado':'vendidas';return `<span class="sales-pill${percent>=100?' sold-out':''}" aria-label="${percent}% de entradas vendidas"><span class="sales-ring" style="--sales-progress:${percent};--sales-color:${color}"><span>${percent}%</span></span><span class="sales-label">${label}</span></span>`}
-async function loadSalesStats(){if(location.protocol==='file:')return;try{const response=await fetch('/api/public/catalog-sales',{headers:{Accept:'application/json'}});if(!response.ok)return;const data=await response.json();for(const stats of data.sales||[])salesStats.set(stats.sourceUrl,stats);if(modal?.classList.contains('open')){const event=events.find(item=>item.slug===new URLSearchParams(location.search).get('evento'));const status=detail.querySelector('.detailstatus,.sales-pill');if(event&&status)status.outerHTML=salesBadge(event)}}catch{}}
+function salesBadge(e){const sales=salesPercent(e);if(sales===null)return '<span class="detailstatus no-sales"><i></i><span>Ventas sin datos</span></span>';const {percent}=sales,color=percent>=100?'#ef4444':'#10b981',label=percent>=100?'agotado':'vendidas';return `<span class="sales-pill${percent>=100?' sold-out':''}" aria-label="${percent}% de entradas vendidas"><span class="sales-ring" style="--sales-progress:${percent};--sales-color:${color}"><span>${percent}%</span></span><span class="sales-label">${label}</span></span>`}
+async function loadSalesStats(){if(location.protocol==='file:')return;try{const response=await fetch('/api/public/catalog-sales',{headers:{Accept:'application/json'}});if(!response.ok)return;const data=await response.json();for(const stats of data.sales||[])salesStats.set(stats.sourceUrl,stats);render();if(modal?.classList.contains('open')){const event=events.find(item=>item.slug===new URLSearchParams(location.search).get('evento'));const status=detail.querySelector('.detailstatus,.sales-pill');if(event&&status)status.outerHTML=salesBadge(event)}}catch{}}
 
 const localAssetBase=location.pathname.includes('/logiticket-mvp/public/')?'./':'./logiticket-mvp/public/';
 const posterUrl=name=>location.protocol==='file:'?(window.logiticketPosterData?.[name]||`${localAssetBase}posters/${name}`):`/posters/${name}`;
