@@ -77,6 +77,12 @@ const requirePlatformAdmin = (req, res, next) => { if (req.session.platformRole 
 const requireOrgManager = (req, res, next) => { if (!req.session.organizerRole || !rolesCanManage.has(req.session.organizerRole)) return res.status(403).json({ error: 'Tu rol no permite gestionar esta acción.' }); next(); };
 const setCsrf = (req, res) => { req.session.csrfToken ||= crypto.randomBytes(32).toString('hex'); res.json({ csrfToken: req.session.csrfToken }); };
 
+app.get('/api/public/catalog-sales', api(async (_req, res) => {
+  const result = await pool.query(`SELECT e.source_url,COALESCE(SUM(tt.sold_count),0)::int AS sold,COALESCE(SUM(tt.capacity),0)::int AS capacity FROM events e JOIN ticket_types tt ON tt.event_id=e.id WHERE e.status='published' AND e.source_url IS NOT NULL GROUP BY e.source_url HAVING COALESCE(SUM(tt.capacity),0)>0`);
+  res.set('Cache-Control', 'public, max-age=30');
+  res.json({ sales: result.rows.map(row => ({ sourceUrl: row.source_url, sold: row.sold, capacity: row.capacity, percent: Math.min(100, Math.floor(row.sold * 100 / row.capacity)) })) });
+}));
+
 app.get('/api/csrf', api((req, res) => setCsrf(req, res)));
 app.post('/api/login', loginLimiter, requireCsrf, api(async (req, res) => {
   const email = String(req.body.email || '').trim().toLowerCase(); const password = String(req.body.password || '');

@@ -5,3 +5,49 @@
 .poster img.image-failed{display:none}
 
 @media(prefers-reduced-motion:reduce){.hero-video{display:none}}
+
+/* Event pages opened from every catalog poster */
+.detail{align-items:start;gap:34px;padding-top:0}
+.detailmedia{position:sticky;top:68px;min-height:0;height:min(68vh,680px);display:grid;place-items:center;background:var(--paper);border:1px solid var(--line)}
+.detailmedia img{display:block;width:100%;height:100%;min-height:0;max-height:none;object-fit:contain}
+.detailmain{padding:4px 0 12px;min-width:0}
+.detailnav,.tickethead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.detailstatus{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:99px;padding:7px 10px;background:#fff;color:#73756c;font-size:10px;font-weight:700;white-space:nowrap}
+.detailstatus i{width:7px;height:7px;border-radius:50%;background:#d6a33b}
+.detailstatus.confirmed i{background:#6c9a3b}
+.detailmain h2{margin:17px 0 10px}
+.detaillead{display:flex;flex-wrap:wrap;gap:9px;color:#66685f;font-size:12px;font-weight:600;margin:0 0 18px}
+.detaillead span{color:#b6b8af}
+.facts{gap:0;padding:4px 15px}
+.fact{padding:11px 0;border-bottom:1px solid #f0f0eb}
+.fact:last-child{border-bottom:0}
+.fact>span{font-size:15px;color:var(--accent);padding-top:1px}
+.fact a{text-decoration:underline;text-decoration-color:#c6c8bd;text-underline-offset:3px}
+.tickethead{align-items:end;margin:21px 0 10px}
+.ticketbox h3{margin:4px 0 0}
+.ticketnote{font-size:10px;color:var(--muted)}
+.fromprice{font-size:11px;color:var(--muted);white-space:nowrap}
+.fromprice b{display:block;color:var(--ink);font-size:19px;margin-top:3px;text-align:right}
+.pendingbox{border:1px solid var(--line);border-radius:14px;padding:17px;background:#eeefe8}
+.pendingbox .tickethead{margin:0 0 14px}
+.pendingmessage{display:flex;gap:12px;background:white;border:1px solid var(--line);border-radius:11px;padding:14px}
+.pendingicon{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;background:#f0f2e8;color:var(--accent)}
+.pendingmessage b{font-size:12px}
+.pendingmessage p{font-size:11px;line-height:1.55;color:var(--muted);margin:5px 0 0}
+.pendingbox .next{margin-top:12px;opacity:.55;cursor:not-allowed}
+@media(max-width:900px){.detail{gap:22px}.detailmedia{top:60px;height:min(62vh,570px)}}
+@media(max-width:650px){.detail{gap:0}.detailmedia{position:relative;top:auto;height:245px;min-height:0;border-radius:13px}.detailmedia img{height:100%;min-height:0}.detailmain{padding-top:18px}.detailnav{align-items:flex-start}.detailstatus{font-size:9px;padding:6px 8px}.detailmain h2{margin-top:14px}.detaillead{font-size:11px}.tickethead{align-items:center}.pendingbox{padding:13px}}
+
+.sales-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 5px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);white-space:nowrap}
+.sales-ring{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--sales-color) calc(var(--sales-progress)*1%),#e7e9e3 0)}
+.sales-ring:before{content:"";position:absolute;inset:4px;border-radius:50%;background:#fff}
+.sales-ring span{position:relative;font-size:8px;font-weight:800;letter-spacing:-.25px}
+.sales-label{font-size:10px;font-weight:700;color:#696b62}
+.sales-pill.sold-out{border-color:#d9fb48;background:#f8fce5}
+.sales-pill.sold-out .sales-ring:before{background:#f8fce5}
+.sales-pill.sold-out .sales-label{color:#4d5e0d}
+.detailstatus.no-sales{color:#72746b}
+@media(max-width:650px){.sales-pill{gap:6px;padding-right:8px}.sales-ring{width:29px;height:29px}}
+.sales-copy{display:grid;gap:1px}
+.sales-pill.demo-sales{border-style:dashed}
+.sales-pill.demo-sales .sales-copy small{font-size:8px;line-height:1;color:#8a8d82;text-transform:uppercase;letter-spacing:.45px;font-weight:700}
