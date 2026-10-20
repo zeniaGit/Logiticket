@@ -48,8 +48,5 @@
 .sales-pill.sold-out .sales-label{color:#4d5e0d}
 .detailstatus.no-sales{color:#72746b}
 @media(max-width:650px){.sales-pill{gap:6px;padding-right:8px}.sales-ring{width:29px;height:29px}}
-.sales-copy{display:grid;gap:1px}
-.sales-pill.demo-sales{border-style:dashed}
-.sales-pill.demo-sales .sales-copy small{font-size:8px;line-height:1;color:#8a8d82;text-transform:uppercase;letter-spacing:.45px;font-weight:700}
 .badge.availability{min-width:0;text-align:center;text-transform:none;letter-spacing:0;font-size:9px;padding:5px 8px}
 .badge.availability.complete{background:var(--lime);color:var(--ink)}
