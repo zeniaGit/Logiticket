@@ -50,3 +50,14 @@
 @media(max-width:650px){.sales-pill{gap:6px;padding-right:8px}.sales-ring{width:29px;height:29px}}
 .badge.availability{min-width:0;text-align:center;text-transform:none;letter-spacing:0;font-size:9px;padding:5px 8px}
 .badge.availability.complete{background:var(--lime);color:var(--ink)}
+.footer{display:block;padding:33px 0 28px}
+.footer-main{display:grid;grid-template-columns:1fr auto minmax(180px,.7fr);gap:40px;align-items:start;padding-bottom:27px}
+.footer-brand p{font-size:11px;color:var(--muted);margin:8px 0 0}
+.footer-main .footlinks{align-self:center;flex-wrap:wrap}
+.footer-contact{display:grid;gap:7px;justify-self:end;font-size:11px}
+.footer-contact h3{font:700 10px 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:1px;margin:0 0 2px;color:var(--muted)}
+.footer-contact a:hover,.footer-main .footlinks a:hover{text-decoration:underline;text-underline-offset:3px}
+.footer-legal{border-top:1px solid var(--line);padding-top:15px;display:flex;gap:8px 18px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:10px;line-height:1.5}
+.footer-legal strong{color:var(--ink)}
+.footer-legal small{margin-left:auto;font-size:10px}
+@media(max-width:650px){.footer-main{grid-template-columns:1fr 1fr;gap:20px;padding-bottom:20px}.footer-brand{grid-column:1/-1}.footer-main .footlinks{align-self:start;display:grid;gap:10px}.footer-contact{justify-self:start}.footer-legal{display:grid;gap:6px}.footer-legal small{margin:5px 0 0}}
