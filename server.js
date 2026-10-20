@@ -46,7 +46,17 @@ app.use(session({
   name: 'logiticket.sid', secret: SESSION_SECRET, resave: false, saveUninitialized: false,
   cookie: { httpOnly: true, secure: NODE_ENV === 'production', sameSite: 'lax', maxAge: 8 * 60 * 60 * 1000 }
 }));
-app.use(express.static('public', { index: false, maxAge: NODE_ENV === 'production' ? '1h' : 0 }));
+app.use(express.static('public', {
+  index: false,
+  maxAge: NODE_ENV === 'production' ? '1h' : 0,
+  setHeaders(res, filePath) {
+    if (/\.(?:html|css|js)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
 app.use('/uploads', express.static(uploadDir, { index: false, maxAge: NODE_ENV === 'production' ? '30d' : 0, immutable: NODE_ENV === 'production' }));
 const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 8, standardHeaders: 'draft-8', legacyHeaders: false });
 const rolesCanManage = new Set(['owner', 'admin', 'event_manager']);
